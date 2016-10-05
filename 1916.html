@@ -1,0 +1,217 @@
+C# Eratta<br/>
+
+
+========================================================================<br/>
+
+Chapter 1, Page 5<br/>
+<br/>
+private PicSourcePaint...<br/>
+
+should say<br/>
+
+private void PicSourcePaint...<br/>
+
+
+========================================================================<br/>
+
+Chapter 1: Page 6<br/>
+<br/>
+Graphics graph = new Graphics();<br/>
+
+This line isn't legal code.  The correct code is <br/>
+
+Graphics graph;<br/>
+
+And the Graphics object must be obtained from a preexisting context.<br/>
+
+
+Also, this line:<br/>
+
+graphics = Graphics.FromHwnd(picSource.Handle);<br/>
+
+should be <br/>
+
+graphics = Graphics.FromImage(picSource.Image);<br/>
+  (also note that .Image is capitalized, unlike the code sample in the <br/>
+middle of page 6)<br/>
+
+
+========================================================================<br/>
+
+Chapter 1, Page 7<br/>
+<br/>
+linGrBrush = new Drawing2D.LinearGradientBrush(...)<br/>
+
+is missing a semicolon.  The last line should say<br/>
+
+  Color.FromArgb(255, 0, 0, 255));  //Blue<br/>
+
+
+
+========================================================================<br/>
+
+Chapter 1, Page 8<br/>
+<br/>
+brushSquare.SurroundColors = new Color(){Color.FromArgb(255,0,0,255)};<br/>
+
+ should be<br/>
+
+brushSquare.SurroundColors = new Color[]{Color.FromArgb(255,0,0,255)};<br/>
+
+
+And...<br/>
+
+Graph.FillPath(brushSquare, graphPath);<br/>
+ 
+should be<br/>
+ 
+graph.FillPath(brushSquare, graphPath);<br/>
+
+
+========================================================================<br/>
+
+Chapter 1, Page 10<br/>
+<br/>
+if(Dx > (r1.extentX+r2.extentX) && (Dy > (r1.extentY+r2.extentY))...<br/>
+
+should be<br/>
+
+if((Dx < (r1.extentX+r2.extentX)) && (Dy < (r1.extentY+r2.extentY))<br/>
+   //overlap<br/>
+else<br/>
+   //no overlap<br/>
+
+
+========================================================================<br/>
+
+Chapter 1, Page 16<br/>
+<br/>
+Some readers have indicated that the Implementation of CircleIntersect at the bottom of Page 18 is erroneous,<br/> 
+indicating that the call to Math.Sqr (squaring function) should be Math.Sqrt (Square root).  This is not an error. <br/>
+Kind of.  The error is that we should have used Math.Pow.  Math.Sqr isn't a valid function.  In addition, the return <br/>
+result:<br/>
+  return (Radius*Radius) < dist;<br/>
+should be<br/>
+  return dist < (Radius*Radius);<br/>
+
+In order to simplify understanding this collision test, I've added a class and an Nunit test harness to help.<br/>  
+The class is AxisAlignedBoundingBox and the test is AABBTest.  Please refer to this code instead of the code <br/>
+snippets on page 16.<br/>
+
+========================================================================<br/>
+
+Chapter 1, Page 19<br/>
+<br/>
+Figure 1-17 says<br/>
+
+Dividing a screen into 64 zones<br/>
+ 
+ should say<br/>
+
+Dividing a screen into 256 zones<br/>
+
+========================================================================<br/>
+
+
+
+Chapter 1, Page 22<br/>
+<br/>
+The extension to Arvo's algorithm on this page is incorrect.  Adding a Z axis<br/>
+check to the AxisAlignedBoundingBox and test code (mentioned above) will yield<br/>
+correct results.<br/>
+
+========================================================================<br/>
+
+Chapter 1, Page 34<br/>
+<br/>
+square.Draw(picBackground.Handle);<br/>
+
+should be<br/>
+
+square.Show(picBackground.Handle);<br/>
+
+
+========================================================================<br/>
+
+Chapter 1, Page 35<br/>
+<br/>
+square.Draw(picBackground.Handle);<br/>
+
+should be<br/>
+
+square.Show(picBackground.Handle);<br/>
+
+
+========================================================================<br/>
+
+Chapter 1, Page 38<br/>
+<br/>
+case BlockTypes.Square:<br/>
+  square1.Location = new Point(Location.X, Location.Y);<br/>
+  square2.Location = new Point(Location.X+squareSize, Location.Y);<br/>
+  square3.Location = new Point(Location.X, Location.Y+squareSize);<br/>
+  square4.Location = new Point(Location.X+squareSize, Location.Y+squareSize);<br/>
+  break;<br/>
+
+should be<br/>
+
+case BlockTypes.Square:<br/>
+  square1.Location = new Point(location.X, location.Y);<br/>
+  square2.Location = new Point(location.X+squareSize, location.Y);<br/>
+  square3.Location = new Point(location.X, location.Y+squareSize);<br/>
+  square4.Location = new Point(location.X+squareSize, location.Y+squareSize);<br/>
+  break;<br/>
+
+
+========================================================================<br/>
+
+Chapter 1,Pages 39-42<br/>
+<br/>
+squareN.location <br/>
+
+should be <br/>
+
+squareN.Location<br/>
+
+========================================================================<br/>
+
+Chapter 1, page 49<br/>
+<br/>
+private void CmdStart_Click event handler must have this value set somewhere<br/>
+in the method:<br/>
+   CmdStart.Enabled = false;<br/>
+
+========================================================================<br/>
+
+Chapter 6, pg 294<br/>
+<br/>
+The new SDK simply returns an identical reference to a mesh if you call Mesh.Clean and nothing changes,<br/> 
+so these lines of code:<br/>
+
+tempMesh = Mesh.Clean(CleanType.Optimization, systemMemoryMesh, adjacencyBuffer, adjacencyBuffer, out errorString);<br/>
+systemMemoryMesh.Dispose();<br/>
+systemMemoryMesh = tempMesh;<br/>
+
+Will yield a nulled SystemMemoryMesh if Mesh.Clean does nothing.  You must explicitly check to verify that the meshes<br/>
+are identical by using the Equals method:<br/>
+
+tempMesh = Mesh.Clean(CleanType.Optimization, systemMemoryMesh, adjacencyBuffer, adjacencyBuffer, out errorString);<br/>
+if (tempMesh != systemMemoryMesh) {<br/>
+	systemMemoryMesh.Dispose();<br/>
+	systemMemoryMesh = tempMesh;<br/>
+}<br/>
+
+========================================================================<br/>
+
+
+Chapter 6, pg 295<br/>
+<br/>
+The Managed DirectX mesh flag OptimizeAttrSort has been changed to OptimizeAttributeSort to conform to Microsoft <br/>
+coding standards.<br/>
+
+========================================================================<br/>
+
+Chapter 6/7<br/>
+<br/>
+The shell code for the Spacewar3D game used the PureDevice flag when creating the device caps.  This resulted in<br/> 
+very strange side-effects or non-functional programs.  That flag has been terminated with prejudice.<br/>
